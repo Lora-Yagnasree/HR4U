@@ -146,6 +146,7 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Employee Name</th>  <!----added---->
                         <th>Employee ID</th>
                         <th>Clock-in Time</th>
                         <th>Clock-out Time</th>
@@ -160,6 +161,7 @@
                 <tbody>
                     {% for entry in time_entries %}
                     <tr>
+                        <td>{{ user.employee_user.name }}</td> <!--added-->
                         <td>{{ entry.user.employee_id }}</td>
                         <td>{{ entry.clock_in_time }}</td>
                         <td>{{ entry.clock_out_time }}</td>
@@ -203,6 +205,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>Employee Name</th>  <!----added---->
                     <th>Employee ID</th>
                     <th>Date</th>
                     <th>Clock-in Time</th>
@@ -215,6 +218,7 @@
             <tbody>
                 {% for request in muster_requests %}
                 <tr>
+                    <td>{{ user.employee_user.name }}</td> <!--added-->
                     <td>{{ request.employee_id }}</td>
                     <td>{{ request.date }}</td>
                     <td>{{ request.clock_in_time }}</td>
@@ -242,6 +246,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>Employee Name</th>  <!----added---->
                     <th>Employee ID</th>
                     <th>Leave Type</th>
                     <th>Start Date</th>
@@ -254,6 +259,7 @@
             <tbody>
                 {% for request in leave_requests %}
                 <tr>
+                    <td>{{ user.employee_user.name }}</td> <!--added-->                 
                     <td>{{ request.employee.employee_id }}</td>
                     <td>{{ request.leave_type }}</td>
                     <td>{{ request.start_date }}</td>
@@ -281,6 +287,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>Employee Name</th>  <!----added---->
                     <th>Employee ID</th>
                     <th>Category</th>
                     <th>Date</th>
@@ -294,6 +301,7 @@
             <tbody>
                 {% for claim in expense_claims %}
                 <tr>
+                    <td>{{ user.employee_user.name }}</td> <!--added-->                    
                     <td>{{ claim.employee.employee_id }}</td>
                     <td>{{ claim.category }}</td>
                     <td>{{ claim.date }}</td>
@@ -328,6 +336,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>Employee Name</th>  <!----added---->
                     <th>Employee ID</th>
                     <th>Loan Type</th>
                     <th>Loan Amount</th>
@@ -340,6 +349,7 @@
             <tbody>
                 {% for loan in loan_requests %}
                 <tr>
+                    <td>{{ user.employee_user.name }}</td> <!--added-->                   
                     <td>{{ loan.employee.employee_id }}</td>
                     <td>{{ loan.loan_type }}</td>
                     <td>{{ loan.loan_amount }}</td>
