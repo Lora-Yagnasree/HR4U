@@ -127,7 +127,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr style="background-color:#f1f1f1;">
-                    <th>Employee Name</th>  <!-- ✅ New Column -->
+                    <th>Employee Name</th>  <!----added---->
                     <th>Employee ID</th>
                     <th>Email</th>
                     <th>Role</th>
@@ -137,7 +137,7 @@
             <tbody>
                 {% for user in users %}
                 <tr>
-                    <td>{{ user.name }}</td>  <!-- ✅ Show Employee Name -->
+                    <td>{{ user.employee_user.name }}</td> <!--added-->
                     <td>{{ user.employee_id }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ user.role }}</td>
