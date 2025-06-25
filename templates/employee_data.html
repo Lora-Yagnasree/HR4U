@@ -139,7 +139,8 @@
     </div>
 
     <!-- Time Entries Section -->
-    {% if request.POST.request_type == 'time_entry' or request.POST.request_type == '' %}
+    {% if request.method != 'POST' or request.POST.request_type == '' or request.POST.request_type == 'time_entry' %}
+    <!--Added above line-->
     <div class="table-container">
         <h5 class="section-header">Employee Regular Muster Status</h5>
         <div class="table-responsive">
@@ -198,7 +199,8 @@
     {% endif %}
 
 <!-- Muster Requests -->
-{% if request.POST.request_type == 'muster' or request.POST.request_type == '' %}
+{% if request.method != 'POST' or request.POST.request_type == '' or request.POST.request_type == 'time_entry' %}
+<!--Added above line-->
 <div class="table-container">
     <h5 class="section-header">Muster Requests</h5>
     <div class="table-responsive">
@@ -239,7 +241,8 @@
 {% endif %}
 
 <!-- Leave Requests Section -->
-{% if request.POST.request_type == 'leave' or request.POST.request_type == '' %}
+{% if request.method != 'POST' or request.POST.request_type == '' or request.POST.request_type == 'time_entry' %}
+<!--Added above line-->
 <div class="table-container">
     <h5 class="section-header">Leave Requests</h5>
     <div class="table-responsive">
@@ -280,7 +283,8 @@
 {% endif %}
 
 <!-- Expense Claims Section -->
-{% if request.POST.request_type == 'expense' or request.POST.request_type == '' %}
+{% if request.method != 'POST' or request.POST.request_type == '' or request.POST.request_type == 'time_entry' %}
+<!--Added above line-->
 <div class="table-container">
     <h5 class="section-header">Expense Claims</h5>
     <div class="table-responsive">
@@ -329,7 +333,8 @@
 {% endif %}
 
 <!-- Loan Requests Section -->
-{% if request.POST.request_type == 'loan' or request.POST.request_type == '' %}
+{% if request.method != 'POST' or request.POST.request_type == '' or request.POST.request_type == 'time_entry' %}
+<!--Added above line-->
 <div class="table-container">
     <h5 class="section-header">Loan Requests</h5>
     <div class="table-responsive">
