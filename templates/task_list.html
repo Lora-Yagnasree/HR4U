@@ -166,7 +166,7 @@
                     {% endif %}
                 </td>
                 <td>{{ task.created_at }}</td>
-                <td>{{ task.created_by.employee_id }}</td>
+                <td>{{ task.created_by.employee_id }} - {{ task.created_by.employee_user.name }}</td> <!--added-->
             </tr>
             {% empty %}
             <tr>

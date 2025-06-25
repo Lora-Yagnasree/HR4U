@@ -127,6 +127,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
+                    <td>Employee Name</td> <!--Added-->
                     <th>Employee ID</th>
                     <th>Advance Privilege Leave</th>
                     <th>Sick Leave</th>
@@ -137,6 +138,7 @@
             <tbody>
                 {% for leave in leaves %}
                 <tr>
+                    <td>{{ leave.employee.employee_user.name }} </td> <!--Added-->
                     <td>{{ leave.employee.employee_id }}</td>
                     <td>{{ leave.advance_privilege_leave }}</td>
                     <td>{{ leave.sick_leave }}</td>
