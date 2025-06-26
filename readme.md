@@ -88,31 +88,41 @@ A full-featured HRMS (Human Resource Management System) built using Django and D
 8. **Folder Structure**
    ```bash
    HR4U/
-├── project/                   # Main Django project (settings and configuration)
-│   ├── __init__.py
-│   ├── settings.py            # Global settings
-│   ├── urls.py                # Root URL configuration
-│   ├── wsgi.py                # WSGI entry-point for deployment
-│   └── asgi.py                # ASGI entry-point for async support
-│
-├── app/                      # Core Django application logic
-│   ├── __init__.py
-│   ├── admin.py              # Admin panel configurations
-│   ├── apps.py
-│   ├── models.py             # Models: User, Property, Booking, etc.
-│   ├── serializers.py        # Serializers for data validation & transformation
-│   ├── urls.py               # Application-level routing
-│   ├── utils.py              # Utility functions (e.g., OTP generation)
-│   ├── views.py              # API views and business logic
-│   └── migrations/           # Django model migrations
-│
-├── media/                    # Uploaded files (e.g., images)
-│
-├── .env                      # Environment variables (not committed to Git)
-├── .gitignore                # Files/folders to ignore in Git
-├── manage.py                 # Django management utility
-├── requirements.txt          # Python project dependencies
-└── README.md                 # Project documentation
+   ├── project/                      # Main Django project (settings and configuration)
+   │   ├── __init__.py
+   │   ├── settings.py               # Global settings
+   │   ├── urls.py                   # Root URL configuration
+   │   ├── wsgi.py                   # WSGI entry-point for deployment
+   │   └── asgi.py                   # ASGI entry-point for async support
+   │
+   ├── app/                          # Core Django app (business logic)
+   ├── __init__.py
+   │   ├── admin.py                  # Admin panel configuration
+   │   ├── apps.py
+   │   ├── models.py                 # Models: User, Property, Booking, etc.
+   │   ├── serializers.py            # Data validation & transformation
+   │   ├── urls.py                   # App-level routing
+   │   ├── utils.py                  # Utility functions (OTP, helper logic)
+   │   └── views.py                  # Business logic & API views
+   │
+   ├── templates/                    # HTML templates
+   │   ├── base.html
+   │   ├── login.html
+   │   ├── dashboard.html
+   │   └── ...                       # Other HTML pages
+   │
+   ├── static/                       # CSS, JS, images
+   │   └── ...
+   │
+   ├── media/                        # Uploaded files (images, PDFs, etc.)
+   │
+   ├── migrations/                   # Django model migrations
+   │
+   ├── .env                          # Environment variables (not committed)
+   ├── .gitignore                    # Files/folders to exclude from Git
+   ├── manage.py                     # Django management utility
+   ├── requirements.txt              # Python dependencies
+   └── README.md                     # Project documentation
 
 
 ## Development Workflow
