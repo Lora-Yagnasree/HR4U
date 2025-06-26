@@ -205,7 +205,7 @@ class Muster(models.Model):
 #------------------------------------------------------------- Leave and Balance #
 
 class Leave(models.Model):
-    employee = models.OneToOneField('CustomUser', on_delete=models.CASCADE)
+    employee = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     advance_privilege_leave = models.IntegerField(default=6)
     sick_leave = models.IntegerField(default=6)
     casual_leave = models.IntegerField(default=6)
