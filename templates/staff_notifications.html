@@ -207,7 +207,7 @@
                 <tbody>
                     {% for leave in leaves %}
                     <tr>
-                        <td>{{ leave.employee.name }}</th>
+                        <td>{{ leave.employee.name }}</th><!--Added-->
                         <td>{{ leave.employee.employee_id }}</td>
                         <td>{{ leave.leave_type }}</td>
                         <td>{{ leave.start_date }}</td>
@@ -244,7 +244,7 @@
 <table class="table">
     <thead style="background-color: #f1f1f1;">
         <tr>
-            <th>Employee Name</th>
+            <th>Employee Name</th><!--Added-->
             <th>Employee ID</th>
             <th>Category</th>
             <th>Date</th>
@@ -259,7 +259,7 @@
     <tbody>
         {% for expense in expenses %}
         <tr>
-            <td>{{ expense.employee.name }}</td>
+            <td>{{ expense.employee.name }}</td><!--Added-->
             <td>{{ expense.employee.employee_id }}</td>
             <td>{{ expense.category }}</td>
             <td>{{ expense.date }}</td>
@@ -298,7 +298,7 @@
 <table class="table">
     <thead style="background-color: #f1f1f1;">
         <tr>
-            <th>Employee Name</th>
+            <th>Employee Name</th><!--Added-->
             <th>Employee ID</th>
             <th>Loan Type</th>
             <th>Loan Amount</th>
@@ -312,7 +312,7 @@
     <tbody>
         {% for loan in pendings_loan %}
         <tr>
-            <td>{{ loan.employee.name }}</td>
+            <td>{{ loan.employee.name }}</td> <!--Added-->
             <td>{{ loan.employee.employee_id }}</td>
             <td>{{ loan.loan_type }}</td>
             <td>{{ loan.loan_amount }}</td>
