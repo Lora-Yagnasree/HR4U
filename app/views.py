@@ -78,27 +78,30 @@ def indexview(request):
 
 
 #------------------------------------------------------------- Login #
-
+#Added This part
 def loginview(request):
-
     if request.user.is_authenticated:
         return render(request, 'dashboard.html')
-    
-    else:
-    
-        if request.method == 'POST':
-            username = request.POST['username']
-            password = request.POST['password']
-            user = authenticate(request, username=username, password=password)
-            
-            if user is not None:    
-                login(request, user)
-                return redirect("dashboard")
-            
-            else:
-                return render(request, 'login.html', {'message': 'User not found'})
-        
+
+    if request.method == 'POST':
+        employee_id = request.POST['username']  
+        password = request.POST['password']
+
+        try:
+            user_obj = User.objects.get(employee_id=employee_id)
+        except User.DoesNotExist:
+            return render(request, 'login.html', {'message': 'User not found'})
+
+        user = authenticate(request, employee_id=employee_id, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect("dashboard")
+        else:
+            return render(request, 'login.html', {'message': 'Incorrect Password'})
+
     return render(request, "login.html")
+
 
 
 #------------------------------------------------------------- Search bar #
