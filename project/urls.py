@@ -25,6 +25,15 @@ urlpatterns = [
     path('',include('app.urls')),
 ]
 
+from django.conf.urls import handler404
+from django.shortcuts import render
+
+def custom_404_view(request, exception):
+    return render(request, '404.html', status=404)
+
+handler404 = 'project.urls.custom_404_view'
+
+
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL , document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL , document_root=settings.MEDIA_ROOT)
