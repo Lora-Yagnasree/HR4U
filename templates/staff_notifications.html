@@ -135,13 +135,14 @@
     </div>
 
     <!-- Muster Requests Section -->
-    {% if request.POST.request_type == 'muster' or request.POST.request_type == '' %}
+    {% if request.method != 'POST' or request_type == '' or request_type == 'muster' %} <!--Added-->
     <div class="table-container">
         <h5 class="section-header">Muster Requests</h5>
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Employee Name</th> <!--Added-->
                         <th>Employee ID</th>
                         <th>Date</th>
                         <th>Clock-in Time</th>
@@ -155,6 +156,7 @@
                 <tbody>
                     {% for muster in musters %}
                     <tr>
+                        <td>{{ muster.user.first_name}} {{ muster.user.last_name }}</td> <!--Added-->
                         <td>{{ muster.employee_id }}</td>
                         <td>{{ muster.date }}</td>
                         <td>{{ muster.clock_in_time }}</td>
@@ -183,13 +185,15 @@
     {% endif %}
 
     <!-- Leave Requests Section -->
-    {% if request.POST.request_type == 'leave' or request.POST.request_type == '' %}
+   {% if request.method != 'POST' or request_type == '' or request_type == 'muster' %}<!--Added-->
+
     <div class="table-container">
         <h5 class="section-header">Leave Requests</h5>
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Employee Name</th>
                         <th>Employee ID</th>
                         <th>Leave Type</th>
                         <th>Start Date</th>
@@ -203,6 +207,7 @@
                 <tbody>
                     {% for leave in leaves %}
                     <tr>
+                        <td>{{ leave.employee.name }}</th>
                         <td>{{ leave.employee.employee_id }}</td>
                         <td>{{ leave.leave_type }}</td>
                         <td>{{ leave.start_date }}</td>
@@ -231,7 +236,7 @@
     {% endif %}
 
 <!-- Expense Table -->
-{% if request.POST.request_type == 'expense' or request.POST.request_type == '' %}
+{% if request.method != 'POST' or request_type == '' or request_type == 'muster' %} <!--Added-->
 
     <div class="table-container">
 <h5>Expense Claim Request</h5>
@@ -239,6 +244,7 @@
 <table class="table">
     <thead style="background-color: #f1f1f1;">
         <tr>
+            <th>Employee Name</th>
             <th>Employee ID</th>
             <th>Category</th>
             <th>Date</th>
@@ -253,6 +259,7 @@
     <tbody>
         {% for expense in expenses %}
         <tr>
+            <td>{{ expense.employee.name }}</td>
             <td>{{ expense.employee.employee_id }}</td>
             <td>{{ expense.category }}</td>
             <td>{{ expense.date }}</td>
@@ -284,14 +291,14 @@
 {% endif %}
 
 <!-- Loan Table -->
-{% if request.POST.request_type == 'loan' or request.POST.request_type == '' %}
-
+{% if request.method != 'POST' or request_type == '' or request_type == 'muster' %} <!--Added-->
 <h5>Loan Request Review</h5>
 <div class="table-container">
 <div class="table-responsive">
 <table class="table">
     <thead style="background-color: #f1f1f1;">
         <tr>
+            <th>Employee Name</th>
             <th>Employee ID</th>
             <th>Loan Type</th>
             <th>Loan Amount</th>
@@ -305,6 +312,7 @@
     <tbody>
         {% for loan in pendings_loan %}
         <tr>
+            <td>{{ loan.employee.name }}</td>
             <td>{{ loan.employee.employee_id }}</td>
             <td>{{ loan.loan_type }}</td>
             <td>{{ loan.loan_amount }}</td>

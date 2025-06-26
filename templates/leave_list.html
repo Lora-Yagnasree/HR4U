@@ -138,7 +138,7 @@
             <tbody>
                 {% for leave in leaves %}
                 <tr>
-                    <td>{{ leave.employee.employee_user.name }} </td> <!--Added-->
+                    <td>{{ leave.employee.user.first_name }} </td> <!--Added-->
                     <td>{{ leave.employee.employee_id }}</td>
                     <td>{{ leave.advance_privilege_leave }}</td>
                     <td>{{ leave.sick_leave }}</td>

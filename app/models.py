@@ -23,6 +23,7 @@ ROLE_TYPE = (
 
 class CustomUser(AbstractUser):
     username = None
+    name = models.CharField(max_length=150)  #!-- Added-->
     role = models.CharField(choices=ROLE_TYPE, max_length=100, error_messages={'required': "Role must be provided"})
     employee_id = models.CharField(max_length=100, unique=True)
     email = models.EmailField(max_length=254, unique=True)
@@ -34,6 +35,14 @@ class CustomUser(AbstractUser):
 
     def __unicode__(self):
         return self.employee_id
+    def save(self, *args, **kwargs): #Added
+        if self.name == 'Unknown' or not self.name:
+            full_name = f"{self.first_name} {self.last_name}".strip()
+            if full_name:
+                self.name = full_name
+            else:
+                self.name = self.email.split('@')[0]
+        super().save(*args, **kwargs)
 
     objects = UserManager()
 
