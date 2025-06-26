@@ -113,8 +113,10 @@ A full-featured HRMS (Human Resource Management System) built using Django and D
 
 ## Development Workflow
 
-**Create templates**
-   This Django project includes the following templates located in the templates/ directory:
+**Create templates** 
+
+This Django project includes the following templates located in the templates
+
 **Core Pages:**
 - 404.html – Custom 404 error page
 - base.html – Base layout used by other templates
