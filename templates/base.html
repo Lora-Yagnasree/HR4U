@@ -415,121 +415,117 @@
 
         <!----  Clock-in / Clock-out ---->
         {% comment %} <script>
-            function getLocationAndSubmitClockIn() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {
-                        document.getElementById('latitude').value = position.coords.latitude;
-                        document.getElementById('longitude').value = position.coords.longitude;
-                        document.getElementById('clock-in-form').submit();
-                    });
-                } else {
-                    alert("Geolocation is not supported by this browser.");
-                }
-            }
-    
-            function getLocationAndSubmitClockOut() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {
-                        document.getElementById('clock-out-latitude').value = position.coords.latitude;
-                        document.getElementById('clock-out-longitude').value = position.coords.longitude;
-                        document.getElementById('clock-out-form').submit();
-                    });
-                } else {
-                    alert("Geolocation is not supported by this browser.");
-                }
-            }
-    
-            const clockInTime = "{{ user.timeentry_set.first.clock_in_time|default:'' }}";
-            const clockOutButton = document.getElementById('clock-out-button');
-            if (clockInTime) {
-                const clockInDate = new Date(clockInTime);
-                const currentTime = new Date();
-                const timeDifference = (currentTime - clockInDate) / (1000 * 60 * 60);
-                if (timeDifference < 9) {
-                    clockOutButton.disabled = true;
-                }
-            }
+    function getLocationAndSubmitClockIn() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                document.getElementById('latitude').value = position.coords.latitude;
+                document.getElementById('longitude').value = position.coords.longitude;
+                document.getElementById('clock-in-form').submit();
+            });
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
 
-        </script> {% endcomment %}
+    function getLocationAndSubmitClockOut() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                document.getElementById('clock-out-latitude').value = position.coords.latitude;
+                document.getElementById('clock-out-longitude').value = position.coords.longitude;
+                document.getElementById('clock-out-form').submit();
+            });
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
 
-        <script>
+    const clockInTime = "{{ user.timeentry_set.first.clock_in_time|default:'' }}".trim();
+    const clockOutButton = document.getElementById('clock-out-button');
+    if (clockInTime) {
+        const clockInDate = new Date(clockInTime);
+        const currentTime = new Date();
+        const timeDifference = (currentTime - clockInDate) / (1000 * 60 * 60);
+        if (timeDifference < 9) {
+            clockOutButton.disabled = true;
+        }
+    }
 
-            function getLocationAndSubmitClockIn() {
-        
-                if (navigator.geolocation) {
-        
-                    navigator.geolocation.getCurrentPosition(function(position) {
-        
-                        const latitudeField = document.getElementById('latitude');
-        
-                        const longitudeField = document.getElementById('longitude');
-        
-                        const form = document.getElementById('clock-in-form');
+    </script> {% endcomment %}
+
+    <script>
+
+        function getLocationAndSubmitClockIn() {
+
+        if (navigator.geolocation) {
+            
+            navigator.geolocation.getCurrentPosition(function(position) {
+
+                const latitudeField = document.getElementById('latitude');
+
+                const longitudeField = document.getElementById('longitude');
+
+                const form = document.getElementById('clock-in-form');
          
-                        if (latitudeField && longitudeField && form) {
-        
-                            latitudeField.value = position.coords.latitude;
-        
-                            longitudeField.value = position.coords.longitude;
-        
-                            form.submit();
-        
-                        } else {
-        
-                            console.error("Clock-in form or fields not found!");
-        
-                        }
-        
-                    });
-        
+                if (latitudeField && longitudeField && form) {
+
+                    latitudeField.value = position.coords.latitude;
+
+                    longitudeField.value = position.coords.longitude;
+
+                    form.submit();
+
                 } else {
-        
-                    alert("Geolocation is not supported by this browser.");
-        
+
+                    console.error("Clock-in form or fields not found!");
+
                 }
-        
-            }
+
+            });
+
+        } else {
+
+            alert("Geolocation is not supported by this browser.");
+
+        }
+
+    }
+     
+    function getLocationAndSubmitClockOut() {
+
+        if (navigator.geolocation) {
+
+            navigator.geolocation.getCurrentPosition(function(position) {
+
+                const latField = document.getElementById('clock-out-latitude');
+
+                const longField = document.getElementById('clock-out-longitude');
+
+                const form = document.getElementById('clock-out-form');
          
-            function getLocationAndSubmitClockOut() {
-        
-                if (navigator.geolocation) {
-        
-                    navigator.geolocation.getCurrentPosition(function(position) {
-        
-                        const latField = document.getElementById('clock-out-latitude');
-        
-                        const longField = document.getElementById('clock-out-longitude');
-        
-                        const form = document.getElementById('clock-out-form');
-         
-                        if (latField && longField && form) {
-        
-                            latField.value = position.coords.latitude;
-        
-                            longField.value = position.coords.longitude;
-        
-                            form.submit();
-        
-                        } else {
-        
-                            console.error("Clock-out form or fields not found!");
-        
-                        }
-        
-                    });
-        
+                if (latField && longField && form) {
+
+                    latField.value = position.coords.latitude;
+
+                    longField.value = position.coords.longitude;
+
+                    form.submit();
+
                 } else {
-        
-                    alert("Geolocation is not supported by this browser.");
-        
+
+                    console.error("Clock-out form or fields not found!");
+
                 }
+
+            });
+
+        } else {
+
+            alert("Geolocation is not supported by this browser.");
+
+        }
+
+    }    // Removed Duplicates here 
         
-            }
-         
-            let clockInTime = "{{ user.timeentry_set.first.clock_in_time|default:'' }}".trim();
-        
-            const clockOutButton = document.getElementById('clock-out-button');
-         
             if (clockOutButton && clockInTime) { 
         
                 const clockInDate = new Date(clockInTime);
@@ -549,8 +545,10 @@
                 }
         
             }
+            
         </script>
-        
+
+
         <!----  Side-toggle ---->
         <script>
             const sidebarToggle = document.querySelector("#sidebar-toggle");
