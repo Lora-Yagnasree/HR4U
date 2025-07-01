@@ -163,7 +163,7 @@
                     {% for entry in time_entries %}
                     <tr>
                         <td>{{ entry.user.employee_user.name }}</td> <!----added---->
-                        <td>{{ request.user.employee_id }}</td>  <!----added---->
+                        <td>{{ entry.user.employee_id }}</td>  <!----added---->
                         <td>{{ entry.clock_in_time }}</td>
                         <td>{{ entry.clock_out_time }}</td>
                         <td>{{ entry.clock_in_latitude }}</td>
@@ -220,7 +220,7 @@
             <tbody>
                 {% for request in muster_requests %}
                 <tr>
-                    <td>{{ request.user.name }}</td>    <!----added---->
+                    <td>{{ request.user.employee_user.name }}</td>    <!----added---->
                     <td>{{ request.user.employee_id }}</td>     <!----added---->
                     <td>{{ request.date }}</td>
                     <td>{{ request.clock_in_time }}</td>
