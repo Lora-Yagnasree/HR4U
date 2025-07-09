@@ -199,7 +199,7 @@
     {% endif %}
 
 <!-- Muster Requests -->
-{% if request.method != 'POST' or request.POST.request_type == '' or request.POST.request_type == 'time_entry' %}
+{% if request.method != 'POST' or request.POST.request_type == '' or request.POST.request_type == 'muster' %}
 <!--Added above line-->
 <div class="table-container">
     <h5 class="section-header">Muster Requests</h5>
@@ -241,7 +241,7 @@
 {% endif %}
 
 <!-- Leave Requests Section -->
-{% if request.method != 'POST' or request.POST.request_type == '' or request.POST.request_type == 'time_entry' %}
+{% if request.method != 'POST' or request.POST.request_type == '' or request.POST.request_type == 'leave' %}
 <!--Added above line-->
 <div class="table-container">
     <h5 class="section-header">Leave Requests</h5>
@@ -283,7 +283,7 @@
 {% endif %}
 
 <!-- Expense Claims Section -->
-{% if request.method != 'POST' or request.POST.request_type == '' or request.POST.request_type == 'time_entry' %}
+{% if request.method != 'POST' or request.POST.request_type == '' or request.POST.request_type == 'expense' %}
 <!--Added above line-->
 <div class="table-container">
     <h5 class="section-header">Expense Claims</h5>
@@ -333,7 +333,7 @@
 {% endif %}
 
 <!-- Loan Requests Section -->
-{% if request.method != 'POST' or request.POST.request_type == '' or request.POST.request_type == 'time_entry' %}
+{% if request.method != 'POST' or request.POST.request_type == '' or request.POST.request_type == 'loan' %}
 <!--Added above line-->
 <div class="table-container">
     <h5 class="section-header">Loan Requests</h5>
@@ -374,4 +374,4 @@
 </div>
 {% endif %}
 </div>
-{% endblock %}
+{% endblock %} 
