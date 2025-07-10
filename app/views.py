@@ -340,26 +340,6 @@ def employee_requests(request):
                     time_entries = time_entries.filter(user_id=employee.id)
             except CustomUser.DoesNotExist:
                 pass
-        
-        # Apply date filter if provided
-        if date_filter:
-            try:
-                filter_date = datetime.strptime(date_filter, "%Y-%m-%d").date()
-                if selected_request_type == 'muster' or selected_request_type == '':
-                    muster_requests = muster_requests.filter(date=filter_date)
-                if selected_request_type == 'leave' or selected_request_type == '':
-                    leave_requests = leave_requests.filter(
-                        start_date__lte=filter_date, 
-                        end_date__gte=filter_date
-                    )
-                if selected_request_type == 'expense' or selected_request_type == '':
-                    expense_claims = expense_claims.filter(date=filter_date)
-                if selected_request_type == 'loan' or selected_request_type == '':
-                    loan_requests = loan_requests.filter(date_requested__date=filter_date)
-                if selected_request_type == 'time_entry' or selected_request_type == '':
-                    time_entries = time_entries.filter(clock_in_time__date=filter_date)
-            except ValueError:
-                pass
     
     employees = CustomUser.objects.all()
     notifications = Notification.objects.filter(recipient=request.user, is_read=False).order_by('-created_at')[:5]
@@ -378,86 +358,63 @@ def employee_requests(request):
         'is_initial_load': is_initial_load,
     })
 #------------------------------------------------------------- Mark as read -- Notifications  #
-from django.contrib.auth.decorators import login_required, user_passes_test
-def is_staff(user):
-    return user.is_authenticated and user.is_staff
+from django.shortcuts import render
+from django.utils import timezone
+from datetime import datetime
+from .models import LeaveRequest, LoanRequest, Muster, ExpenseClaim
 
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='/')
-@user_passes_test(is_staff)
+@staff_member_required
 def staff_notifications(request):
-    today_date = timezone.localtime(timezone.now()).date()
+    employee_id = request.GET.get('employee_id')
+    request_type = request.GET.get('request_type')
+    filter_date = request.GET.get('date')
 
-    # Initialize all requests
-    muster_requests = Muster.objects.filter(status="Pending")
-    leave_requests = LeaveRequest.objects.filter(status="Pending")
-    expense_claims = ExpenseClaim.objects.filter(status="Pending")
-    loan_requests = LoanRequest.objects.filter(status="Pending")
+    today = timezone.localdate()
+    selected_date = today
 
-    is_initial_load = not request.method == 'POST'
-    selected_request_type = ''
-    
-    if is_initial_load:
-        # Only show today's pending records on initial load
-        muster_requests = muster_requests.filter(date=today_date)
-        leave_requests = leave_requests.filter(start_date__lte=today_date, end_date__gte=today_date)
-        expense_claims = expense_claims.filter(date=today_date)
-        loan_requests = loan_requests.filter(date_requested__date=today_date)
+    if filter_date:
+        try:
+            selected_date = datetime.strptime(filter_date, '%Y-%m-%d').date()
+        except ValueError:
+            selected_date = today
 
-    if request.method == 'POST':
-        is_initial_load = False
-        employee_id_input = request.POST.get('employee_id', '').strip()
-        selected_request_type = request.POST.get('request_type', '')
+    leave_requests = LeaveRequest.objects.filter(status='pending', start_date=selected_date)
+    loan_requests = LoanRequest.objects.filter(status='pending', date_applied=selected_date)
+    muster_requests = Muster.objects.filter(status='pending', clock_in_time__date=selected_date)
+    expense_claims = ExpenseClaim.objects.filter(status='pending', date_submitted=selected_date)
 
-        # ⬇️ Reset to default if filters are cleared
-        if not employee_id_input and not selected_request_type:
-            return redirect('staff_notifications')
+    if employee_id:
+        leave_requests = leave_requests.filter(employee__employee_id=employee_id)
+        loan_requests = loan_requests.filter(employee__employee_id=employee_id)
+        muster_requests = muster_requests.filter(user__employee__employee_id=employee_id)
+        expense_claims = expense_claims.filter(employee__employee_id=employee_id)
 
-        # Filter by employee ID if provided
-        if employee_id_input:
-            try:
-                employee = CustomUser.objects.get(employee_id=employee_id_input)
-                if selected_request_type == 'muster' or selected_request_type == '':
-                    muster_requests = muster_requests.filter(user=employee)
-                if selected_request_type == 'leave' or selected_request_type == '':
-                    leave_requests = leave_requests.filter(employee__employee_id=employee.employee_id)
-                if selected_request_type == 'expense' or selected_request_type == '':
-                    expense_claims = expense_claims.filter(employee__employee_id=employee.employee_id)
-                if selected_request_type == 'loan' or selected_request_type == '':
-                    loan_requests = loan_requests.filter(employee__employee_id=employee.employee_id)
-            except CustomUser.DoesNotExist:
-                muster_requests = Muster.objects.none()
-                leave_requests = LeaveRequest.objects.none()
-                expense_claims = ExpenseClaim.objects.none()
-                loan_requests = LoanRequest.objects.none()
+    if request_type:
+        request_type = request_type.lower()
+        leave_requests = leave_requests if request_type == 'leave' else LeaveRequest.objects.none()
+        loan_requests = loan_requests if request_type == 'loan' else LoanRequest.objects.none()
+        muster_requests = muster_requests if request_type == 'muster' else Muster.objects.none()
+        expense_claims = expense_claims if request_type == 'expense' else ExpenseClaim.objects.none()
 
-        # Filter by request type (if no employee ID)
-        if not employee_id_input:
-            if selected_request_type == 'muster':
-                leave_requests = LeaveRequest.objects.none()
-                expense_claims = ExpenseClaim.objects.none()
-                loan_requests = LoanRequest.objects.none()
-            elif selected_request_type == 'leave':
-                muster_requests = Muster.objects.none()
-                expense_claims = ExpenseClaim.objects.none()
-                loan_requests = LoanRequest.objects.none()
-            elif selected_request_type == 'expense':
-                muster_requests = Muster.objects.none()
-                leave_requests = LeaveRequest.objects.none()
-                loan_requests = LoanRequest.objects.none()
-            elif selected_request_type == 'loan':
-                muster_requests = Muster.objects.none()
-                leave_requests = LeaveRequest.objects.none()
-                expense_claims = ExpenseClaim.objects.none()
+    context = {
+        'leave_requests': leave_requests,
+        'loan_requests': loan_requests,
+        'muster_requests': muster_requests,
+        'expense_claims': expense_claims,
+        'employee_id': employee_id or '',
+        'request_type': request_type or '',
+        'selected_date': selected_date.strftime('%Y-%m-%d'),
+    }
 
-    return render(request, 'staff_notifications.html', {
-        'musters': muster_requests,
-        'leaves': leave_requests,
-        'expenses': expense_claims,
-        'pendings_loan': loan_requests,
-        'is_initial_load': is_initial_load,
-        'selected_request_type': selected_request_type,
-    })
+    return render(request, 'staff_notifications.html', context)
+
+
+# ================= Review Views =================
+
 #------------------------------------------------------------- clock In #
 
 @login_required(login_url='/')
