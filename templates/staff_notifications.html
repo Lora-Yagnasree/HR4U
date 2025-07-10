@@ -185,7 +185,7 @@
     {% endif %}
 
     <!-- Leave Requests Section -->
-   {% if request.method != 'POST' or request_type == '' or request_type == 'muster' %}<!--Added-->
+   {% if request.method != 'POST' or request_type == '' or request_type == 'leave' %}<!--Added-->
 
     <div class="table-container">
         <h5 class="section-header">Leave Requests</h5>
@@ -236,7 +236,7 @@
     {% endif %}
 
 <!-- Expense Table -->
-{% if request.method != 'POST' or request_type == '' or request_type == 'muster' %} <!--Added-->
+{% if request.method != 'POST' or request_type == '' or request_type == 'expense' %} <!--Added-->
 
     <div class="table-container">
 <h5>Expense Claim Request</h5>
@@ -291,7 +291,7 @@
 {% endif %}
 
 <!-- Loan Table -->
-{% if request.method != 'POST' or request_type == '' or request_type == 'muster' %} <!--Added-->
+{% if request.method != 'POST' or request_type == '' or request_type == 'loan' %} <!--Added-->
 <h5>Loan Request Review</h5>
 <div class="table-container">
 <div class="table-responsive">

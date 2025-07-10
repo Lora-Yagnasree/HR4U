@@ -363,19 +363,56 @@ def employee_requests(request):
 def staff_notifications(request):
     user = request.user
     employee = Employee.objects.get(employee_id=user.employee_id)
-
-    musters = Muster.objects.filter(status='Pending')
-    leaves = LeaveRequest.objects.filter(status='pending')
-    expenses = ExpenseClaim.objects.filter(status='pending')
-    pendings_loan = LoanRequest.objects.filter(status='pending')
-
+    
+    # Get filter parameters from request
+    employee_id = request.POST.get('employee_id', '')
+    request_type = request.POST.get('request_type', '')
+    
+    # Get today's date
+    today = timezone.now().date()
+    
+    # Initialize querysets - ALL use today filter by default
+    musters = Muster.objects.filter(status='Pending', date=today)
+    leaves = LeaveRequest.objects.filter(status='pending', start_date__lte=today, end_date__gte=today)
+    expenses = ExpenseClaim.objects.filter(status='pending', date=today)
+    pendings_loan = LoanRequest.objects.filter(status='pending', date_requested__date=today)  # Changed to date_requested__date
+    
+    # Only remove date filters if search criteria is provided
+    if employee_id or request_type:
+        musters = Muster.objects.filter(status='Pending')
+        leaves = LeaveRequest.objects.filter(status='pending')
+        expenses = ExpenseClaim.objects.filter(status='pending')
+        pendings_loan = LoanRequest.objects.filter(status='pending')
+        
+        if employee_id:
+            musters = musters.filter(employee_id=employee_id)
+            leaves = leaves.filter(employee__employee_id=employee_id)
+            expenses = expenses.filter(employee__employee_id=employee_id)
+            pendings_loan = pendings_loan.filter(employee__employee_id=employee_id)
+        
+        if request_type:
+            if request_type == 'muster':
+                leaves = leaves.none()
+                expenses = expenses.none()
+                pendings_loan = pendings_loan.none()
+            elif request_type == 'leave':
+                musters = musters.none()
+                expenses = expenses.none()
+                pendings_loan = pendings_loan.none()
+            elif request_type == 'expense':
+                musters = musters.none()
+                leaves = leaves.none()
+                pendings_loan = pendings_loan.none()
+            elif request_type == 'loan':
+                musters = musters.none()
+                leaves = leaves.none()
+                expenses = expenses.none()
+    
     notifications = Notification.objects.filter(recipient=request.user, is_read=False).order_by('-created_at')[:5]
 
     if user.role == 'HR' or user.role == 'Manager' or user.is_superuser:
-        user = request.user
         notifications = Notification.objects.filter(recipient=request.user, is_read=False).order_by('-created_at')[:5]
-        
-
+    
     return render(request, 'staff_notifications.html', {
         'employee': employee,
         'musters': musters,
@@ -383,8 +420,10 @@ def staff_notifications(request):
         'expenses': expenses,
         'pendings_loan': pendings_loan,
         'notifications': notifications,
+        'request_type': request_type,
+        'employee_id': employee_id,
+        'today': today,
     })
-
 
 #------------------------------------------------------------- clock In #
 
