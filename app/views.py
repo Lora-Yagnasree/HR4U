@@ -385,6 +385,7 @@ def staff_notifications(request):
         'notifications': notifications,
     })
 
+
 #------------------------------------------------------------- clock In #
 
 @login_required(login_url='/')
