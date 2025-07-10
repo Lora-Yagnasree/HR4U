@@ -146,7 +146,7 @@ def search_results(request):
 
         if normalized_page_name in normalized_query:
             return redirect(reverse(url_name))  
- 
+
     return redirect('dashboard')
 
 
