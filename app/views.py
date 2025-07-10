@@ -146,7 +146,7 @@ def search_results(request):
 
         if normalized_page_name in normalized_query:
             return redirect(reverse(url_name))  
-
+ 
     return redirect('dashboard')
 
 
@@ -358,62 +358,115 @@ def employee_requests(request):
         'is_initial_load': is_initial_load,
     })
 #------------------------------------------------------------- Mark as read -- Notifications  #
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils import timezone
-from datetime import datetime
-from .models import LeaveRequest, LoanRequest, Muster, ExpenseClaim
+from django.contrib.auth.decorators import login_required, user_passes_test
 
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import login_required
+from .models import CustomUser, Muster, LeaveRequest, ExpenseClaim, LoanRequest
+
+def is_staff(user):
+    return user.is_authenticated and user.is_staff
 
 @login_required(login_url='/')
-@staff_member_required
+@user_passes_test(is_staff)
 def staff_notifications(request):
-    employee_id = request.GET.get('employee_id')
-    request_type = request.GET.get('request_type')
-    filter_date = request.GET.get('date')
+    today_date = timezone.localtime(timezone.now()).date()
 
-    today = timezone.localdate()
-    selected_date = today
+    # All Pending Data
+    muster_requests = Muster.objects.filter(status="Pending", date=today_date)
+    leave_requests = LeaveRequest.objects.filter(status="Pending", start_date__lte=today_date, end_date__gte=today_date)
+    expense_claims = ExpenseClaim.objects.filter(status="Pending", date=today_date)
+    loan_requests = LoanRequest.objects.filter(status="Pending", date_requested__date=today_date)
 
-    if filter_date:
-        try:
-            selected_date = datetime.strptime(filter_date, '%Y-%m-%d').date()
-        except ValueError:
-            selected_date = today
+    is_initial_load = not request.method == 'POST'
+    selected_request_type = ''
+    employee_id_input = ''
 
-    leave_requests = LeaveRequest.objects.filter(status='pending', start_date=selected_date)
-    loan_requests = LoanRequest.objects.filter(status='pending', date_applied=selected_date)
-    muster_requests = Muster.objects.filter(status='pending', clock_in_time__date=selected_date)
-    expense_claims = ExpenseClaim.objects.filter(status='pending', date_submitted=selected_date)
+    if request.method == 'POST':
+        is_initial_load = False
+        employee_id_input = request.POST.get('employee_id', '').strip()
+        selected_request_type = request.POST.get('request_type', '')
 
-    if employee_id:
-        leave_requests = leave_requests.filter(employee__employee_id=employee_id)
-        loan_requests = loan_requests.filter(employee__employee_id=employee_id)
-        muster_requests = muster_requests.filter(user__employee__employee_id=employee_id)
-        expense_claims = expense_claims.filter(employee__employee_id=employee_id)
+        if not employee_id_input and not selected_request_type:
+            return redirect('staff_notifications')
 
-    if request_type:
-        request_type = request_type.lower()
-        leave_requests = leave_requests if request_type == 'leave' else LeaveRequest.objects.none()
-        loan_requests = loan_requests if request_type == 'loan' else LoanRequest.objects.none()
-        muster_requests = muster_requests if request_type == 'muster' else Muster.objects.none()
-        expense_claims = expense_claims if request_type == 'expense' else ExpenseClaim.objects.none()
+        # Get employee object (if valid)
+        employee = None
+        if employee_id_input:
+            try:
+                employee = CustomUser.objects.get(employee_id=employee_id_input)
+            except CustomUser.DoesNotExist:
+                muster_requests = Muster.objects.none()
+                leave_requests = LeaveRequest.objects.none()
+                expense_claims = ExpenseClaim.objects.none()
+                loan_requests = LoanRequest.objects.none()
+                return render(request, 'staff_notifications.html', {
+                    'musters': muster_requests,
+                    'leaves': leave_requests,
+                    'expenses': expense_claims,
+                    'pendings_loan': loan_requests,
+                    'is_initial_load': False,
+                    'selected_request_type': selected_request_type,
+                })
 
-    context = {
-        'leave_requests': leave_requests,
-        'loan_requests': loan_requests,
-        'muster_requests': muster_requests,
-        'expense_claims': expense_claims,
-        'employee_id': employee_id or '',
-        'request_type': request_type or '',
-        'selected_date': selected_date.strftime('%Y-%m-%d'),
-    }
+        # Apply filters
+        if selected_request_type in ('', 'muster'):
+            if employee:
+                muster_requests = Muster.objects.filter(user=employee, status="Pending", date=today_date)
+            else:
+                muster_requests = Muster.objects.filter(status="Pending", date=today_date)
+        else:
+            muster_requests = Muster.objects.none()
 
-    return render(request, 'staff_notifications.html', context)
+        if selected_request_type in ('', 'leave'):
+            if employee:
+                leave_requests = LeaveRequest.objects.filter(
+                    employee__employee_id=employee.employee_id,
+                    status="Pending",
+                    start_date__lte=today_date,
+                    end_date__gte=today_date
+                )
+            else:
+                leave_requests = LeaveRequest.objects.filter(
+                    status="Pending",
+                    start_date__lte=today_date,
+                    end_date__gte=today_date
+                )
+        else:
+            leave_requests = LeaveRequest.objects.none()
 
+        if selected_request_type in ('', 'expense'):
+            if employee:
+                expense_claims = ExpenseClaim.objects.filter(
+                    employee__employee_id=employee.employee_id,
+                    status="Pending",
+                    date=today_date
+                )
+            else:
+                expense_claims = ExpenseClaim.objects.filter(status="Pending", date=today_date)
+        else:
+            expense_claims = ExpenseClaim.objects.none()
 
-# ================= Review Views =================
+        if selected_request_type in ('', 'loan'):
+            if employee:
+                loan_requests = LoanRequest.objects.filter(
+                    employee__employee_id=employee.employee_id,
+                    status="Pending",
+                    date_requested__date=today_date
+                )
+            else:
+                loan_requests = LoanRequest.objects.filter(status="Pending", date_requested__date=today_date)
+        else:
+            loan_requests = LoanRequest.objects.none()
+
+    return render(request, 'staff_notifications.html', {
+        'musters': muster_requests,
+        'leaves': leave_requests,
+        'expenses': expense_claims,
+        'pendings_loan': loan_requests,
+        'is_initial_load': is_initial_load,
+        'selected_request_type': selected_request_type,
+    })
 
 #------------------------------------------------------------- clock In #
 
