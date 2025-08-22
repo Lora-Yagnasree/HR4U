@@ -294,5 +294,5 @@ HR4U v2.0 introduces a multi-company login system, allowing multiple organizatio
 **Implement Sidebar & Navigation:** Update sidebar with links to new modules and pages such as Training, FAQ, Contact Us, and Task Management, etc for easy navigation.
 
 **Update Dependencies:** Maintain and update requirements.txt with all installed libraries.   
-      ```bash
-      pip freeze > requirements.txt
+```bash
+pip freeze > requirements.txt
