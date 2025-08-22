@@ -162,17 +162,17 @@ HR4U v2.0 introduces a multi-company login system, allowing multiple organizatio
 ## Login Flow
 
 - **Company Selection**
-- Users must enter their company name (e.g., LoRa, Tech Solutions). The system matches company names in a case-sensitive manner. Auto-suggestions are available (typing L suggests LoRa, T suggests Tech Solutions).
+   - Users must enter their company name (e.g., LoRa, Tech Solutions). The system matches company names in a case-sensitive manner. Auto-suggestions are available (typing L suggests LoRa, T suggests Tech Solutions).
 - **Company Verification**
-- If the company name does not exist, access is denied with Error: Company not found
+   - If the company name does not exist, access is denied with Error: Company not found
 - **Employee Authentication (Per Company)**
-- Once the company is verified, the system prompts for Employee ID and Password.
+   - Once the company is verified, the system prompts for Employee ID and Password.
 - **Validation rules:**
-- If an invalid Employee ID is entered → Error: User not found
-- If an incorrect password is entered → Error: Incorrect Password
-- If a valid Employee ID & Password are entered but belong to another company → Error: You are unauthorized to access this company.
+   - If an invalid Employee ID is entered → Error: User not found
+   - If an incorrect password is entered → Error: Incorrect Password
+   - If a valid Employee ID & Password are entered but belong to another company → Error: You are unauthorized to access this company.
 - **Successful Login:**
-- If the company, employee ID, and password are all correct, the user is granted role-based access (Admin / HR / Manager / Employee) within their company’s HRMS environment.
+   - If the company, employee ID, and password are all correct, the user is granted role-based access (Admin / HR / Manager / Employee) within their company’s HRMS environment.
 
 ## Additional Security & Session Management Features 
 - **Auto Logout on Inactivity:** Users are automatically logged out after 5 minutes of inactivity to enhance security and prevent unauthorized access on unattended devices.
@@ -186,32 +186,29 @@ HR4U v2.0 introduces a multi-company login system, allowing multiple organizatio
   - Login Timestamps: This enables auditing of login events and monitoring for unusual activity.
   - Session Timeout Implementation: Utilizes session expiry settings and middleware logic to monitor user activity time, automatically invalidating sessions after the idle timeout period.
 - **Login History Auto-Cleanup**
-- Retention Rule: Login history records are auto-deleted every 18 hours.
-- Deduplication:
-- If a user logs in multiple times on same device within a day → stored only once.
-- If logged in from different devices within a day → each unique device is recorded
+  - Retention Rule: Login history records are auto-deleted every 18 hours.
+  - Deduplication: If a user logs in multiple times on same device within a day → stored only once. If logged in from different devices within a day → each unique device is recorded
 
 ## Security Upgrades
 
-- **Sensitive Data Encryption with Cryptography**
-- HR4U v2.0 uses the Python cryptography library to encrypt sensitive employee fields such as:
-
-1. UAN Number
-2. PAN Number
-3. Aadhaar Number
-4. Bank Account Number
+- **Sensitive Data Encryption with Cryptography:**
+  - HR4U v2.0 uses the Python cryptography library to encrypt sensitive employee fields such as:
+   1. UAN Number
+   2. PAN Number
+   3. Aadhaar Number
+   4. Bank Account Number
 
 - **Implementation**
-- These fields are encrypted at rest in the database using field-level encryption via the django-cryptography package. Encryption keys are securely managed via environment variables. The encryption mechanism uses strong symmetric encryption algorithms (AES-256) ensuring confidentiality even if the database is compromised.
+  - These fields are encrypted at rest in the database using field-level encryption via the django-cryptography package. Encryption keys are securely managed via environment variables. The encryption mechanism uses strong symmetric encryption algorithms (AES-256) ensuring confidentiality even if the database is compromised.
 
 - **Installation**
-- Install the cryptography package with pip before running the project: pip install cryptography.
+  - Install the cryptography package with pip before running the project: pip install cryptography.
 
 ## Profile & Cover Picture Enhancements
-- Resolved issues related to profile picture uploads and display to ensure consistent user experience.
-- Introduced the EmployeeMedia model to manage profile and cover images efficiently.
-- New users receive default profile and cover pictures set to the AIHR4U logos, which can be updated by users anytime.
-- Improved media handling and storage ensuring reliable image upload, retrieval, and display across the platform.
+   - Resolved issues related to profile picture uploads and display to ensure consistent user experience.
+   - Introduced the EmployeeMedia model to manage profile and cover images efficiently.
+   - New users receive default profile and cover pictures set to the AIHR4U logos, which can be updated by users anytime.
+   - Improved media handling and storage ensuring reliable image upload, retrieval, and display across the platform.
 
 ## New Pages Added
 
