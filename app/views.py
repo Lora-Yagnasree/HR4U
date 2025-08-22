@@ -59,7 +59,7 @@ def indexview(request):
 
     if request.user.is_authenticated:
         return render(request, 'dashboard.html')
-    
+
     else:
 
         if request.method == "POST":
