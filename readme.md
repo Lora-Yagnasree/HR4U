@@ -188,6 +188,13 @@ HR4U v2.0 introduces a multi-company login system, allowing multiple organizatio
 - **Login History Auto-Cleanup**
   - Retention Rule: Login history records are auto-deleted every 18 hours.
   - Deduplication: If a user logs in multiple times on same device within a day → stored only once. If logged in from different devices within a day → each unique device is recorded
+- **Account Lock & Unlock**  
+  - Accounts are locked after 5 failed password attempts for the same Employee ID.  
+  - Locked users see the message: “Contact your HR to Unlock.”  
+  - An email notification is sent to all HRs, and any HR can approve the unlock via a one-click link.  
+  - Once approved, the account enters a 15-minute cooldown period before it is automatically unlocked.  
+  - During cooldown, login attempts remain blocked even with the correct password.
+
 
 ## Security Upgrades
 
@@ -230,17 +237,45 @@ HR4U v2.0 introduces a multi-company login system, allowing multiple organizatio
 - Detailed Task Tracking: View task status (Pending/Completed), assignment dates, and assignees via a clear tabular dashboard.
 - Interactive UI: Modals and alerts included for smooth task detail viewing and confirmations.
 
-**Training:** Manage and access training content; HR/Managers can add/edit/delete topics.
+ **Training:**  Introduced a Training module to manage and access training resources.  
+- HR and Managers can add, edit, or delete training topics  
+- Employees can view and engage with available content  
+- Organized for easy learning and tracking  
 
-**FAQ:** Browse and manage frequently asked questions; admins can add or update FAQs.
+ **FAQ:**  Added a Frequently Asked Questions (FAQ) module for quick access to common queries.  
+- Employees can browse FAQs for self-service support  
+- Admins can add or update FAQs as needed  
+- Improves efficiency by reducing repetitive queries  
 
-**Contact Us:** Employee form to send messages directly to HR with subject and message fields.
+ **Contact Us:** Implemented a Contact Us form for direct communication with HR.  
+- Employees can submit messages with subject and details  
+- Messages are delivered securely to HR for review and response  
+- Streamlined internal communication channel  
 
-**Sidebar:** Updated navigation with quick links to Training, FAQ, and Contact Us pages for easy access.
+ **Logo Management:** Introduced a dedicated Logo Management module, allowing companies to manage their branding directly within the platform.  
+- Upload and preview company logos  
+- Update or replace existing logos  
+- Delete logos when needed  
 
-**Dashboard Update:** Added Active Tasks Card on the user dashboard. Shows number of current active tasks.
+ **New Excel export feature:** Added Excel Export functionality for employee data:  
+- Allows HR and Managers to download all employee records in `.xlsx` format  
+- Provides structured and portable data for reporting and compliance  
+   ```bash
+   pip install openpyxl
+   # (optional for larger sheets or styling)
+   pip install XlsxWriter
+
+**Dashboard Updates:** 
+
+1. The dashboard now displays top-bar statistics, providing HR and Managers with a quick overview of daily workforce activity:
+   - Total Employees, Clock-ins Today, and Today Leaves. 
+
+2. Added Active Tasks Card on the user dashboard. Shows number of current active tasks:
    - If tasks exist → "You have X active tasks".
-   - If no tasks exist → "No tasks in sight, you're all caught up"
+   - If no tasks exist → "No tasks in sight, you're all caught up".
+
+3. Sidebar updated with quick links for better navigation, giving users easy access to:  
+   - HR4U, Training, Task Management, Logo Management, Login History etc..
 
 ## Development Workflow
 
@@ -252,13 +287,12 @@ HR4U v2.0 introduces a multi-company login system, allowing multiple organizatio
 
 **Configure URLs:** Map all views to appropriate URLs in both app-level and project-level urls.py to organize routing cleanly.
 
-**Create Templates:** Develop responsive and interactive HTML templates for dashboards, login, training, FAQ, task lists, and help desk ticketing.
+**Create Templates:** Develop responsive and interactive HTML templates for dashboards, login, training, FAQ, task lists, and help desk ticketing, etc.
 
 **Integrate Security Features:** Add session timeout, single device login restriction, login history tracking, and field-level encryption using django-cryptography.
 
-**Implement Sidebar & Navigation:** Update sidebar with links to new modules and pages such as Training, FAQ, Contact Us, and Task Management for easy navigation.
+**Implement Sidebar & Navigation:** Update sidebar with links to new modules and pages such as Training, FAQ, Contact Us, and Task Management, etc for easy navigation.
 
-**Update Dependencies**  
-- Maintain and update `requirements.txt` with all installed libraries.   
-  ```bash
-  pip freeze > requirements.txt
+**Update Dependencies:** Maintain and update requirements.txt with all installed libraries.   
+      ```bash
+      pip freeze > requirements.txt
