@@ -202,7 +202,10 @@ HR4U v2.0 introduces a multi-company login system, allowing multiple organizatio
   - These fields are encrypted at rest in the database using field-level encryption via the django-cryptography package. Encryption keys are securely managed via environment variables. The encryption mechanism uses strong symmetric encryption algorithms (AES-256) ensuring confidentiality even if the database is compromised.
 
 - **Installation**
-  - Install the cryptography package with pip before running the project: pip install cryptography.
+  - Install the cryptography package with pip before running the project: 
+  
+  ```bash
+  pip install cryptography
 
 ## Profile & Cover Picture Enhancements
    - Resolved issues related to profile picture uploads and display to ensure consistent user experience.
@@ -236,8 +239,8 @@ HR4U v2.0 introduces a multi-company login system, allowing multiple organizatio
 **Sidebar:** Updated navigation with quick links to Training, FAQ, and Contact Us pages for easy access.
 
 **Dashboard Update:** Added Active Tasks Card on the user dashboard. Shows number of current active tasks.
-- If tasks exist → "You have X active tasks".
-- If no tasks exist → "No tasks in sight, you're all caught up"
+   - If tasks exist → "You have X active tasks".
+   - If no tasks exist → "No tasks in sight, you're all caught up"
 
 ## Development Workflow
 
@@ -254,3 +257,8 @@ HR4U v2.0 introduces a multi-company login system, allowing multiple organizatio
 **Integrate Security Features:** Add session timeout, single device login restriction, login history tracking, and field-level encryption using django-cryptography.
 
 **Implement Sidebar & Navigation:** Update sidebar with links to new modules and pages such as Training, FAQ, Contact Us, and Task Management for easy navigation.
+
+**Update Dependencies**  
+- Maintain and update `requirements.txt` with all installed libraries.   
+  ```bash
+  pip freeze > requirements.txt
